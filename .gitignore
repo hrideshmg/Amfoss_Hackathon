@@ -12,6 +12,7 @@ Icon
 # Thumbnails
 ._*
 backend/.venv
+venv
 
 # Files that might appear on external disk
 .Spotlight-V100
