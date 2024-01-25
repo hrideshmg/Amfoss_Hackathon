@@ -1,10 +1,10 @@
 from rest_framework.views import APIView
-from utils import get_db
 
 from api.crawler import CrawlerManager
+from utils import get_db
 
 
 class MApiView(APIView):
     def __init__(self):
         super().__init__()
-        self.database = get_db()
+        self.database = get_db()[1]

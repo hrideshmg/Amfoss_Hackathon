@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 
 import extruct
 import scrapy
+from pymongo import TEXT
 from scrapy import signals
 from scrapy.crawler import CrawlerRunner
 from scrapy.linkextractors import LinkExtractor
@@ -10,6 +11,8 @@ from scrapy.spiders import CrawlSpider, Rule
 from twisted.internet import reactor
 from w3lib.html import replace_escape_chars
 from w3lib.url import url_query_cleaner
+
+from utils import get_db
 
 
 def process_links(links):
@@ -35,12 +38,13 @@ class PageCrawler(CrawlSpider):
     )
 
     def parse_item(self, response):
-        parsed_content = "".join(response.xpath("*//p/text()").getall())[:1200]
+        parsed_content = "".join(response.xpath("*//p/text()").getall())
         parsed_content = replace_escape_chars(parsed_content)
-        parsed_content
+        title = response.xpath("//title/text()").get("")
         yield {
             "url": response.url,
             "content": parsed_content,
+            "title": title,
             "metadata": extruct.extract(
                 response.text, response.url, syntaxes=["opengraph", "json-ld"]
             ),
@@ -49,7 +53,9 @@ class PageCrawler(CrawlSpider):
 
 class CrawlerManager:
     def _start_crawler_process(self, url, queue):
-        runner = CrawlerRunner(settings={"ITEM_PIPELINES": "api.pipelines.StoreMyItem"})
+        runner = CrawlerRunner(
+            settings={"ITEM_PIPELINES": {"api.pipelines.StoreItem": 100}}
+        )
         scrapy.utils.log.configure_logging(
             {
                 "LOG_FORMAT": "%(levelname)s: %(message)s",
