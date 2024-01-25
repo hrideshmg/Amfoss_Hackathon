@@ -6,4 +6,4 @@ from utils import get_db
 class MApiView(APIView):
     def __init__(self):
         super().__init__()
-        self.database = get_db(db_name="spiderdb")
+        self.database = get_db()
