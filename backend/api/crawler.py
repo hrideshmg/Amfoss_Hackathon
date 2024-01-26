@@ -1,9 +1,10 @@
+import io
 import multiprocessing
 from urllib.parse import urlparse
 
 import extruct
+import PyPDF2
 import scrapy
-from pymongo import TEXT
 from scrapy import signals
 from scrapy.crawler import CrawlerRunner
 from scrapy.linkextractors import LinkExtractor
@@ -11,8 +12,6 @@ from scrapy.spiders import CrawlSpider, Rule
 from twisted.internet import reactor
 from w3lib.html import replace_escape_chars
 from w3lib.url import url_query_cleaner
-
-from utils import get_db
 
 
 def process_links(links):
@@ -41,6 +40,11 @@ class PageCrawler(CrawlSpider):
         parsed_content = "".join(response.xpath("*//p/text()").getall())
         parsed_content = replace_escape_chars(parsed_content)
         title = response.xpath("//title/text()").get("")
+        pdf_links_selectors = response.xpath(
+            '//a[contains(@href, ".pdf")]/@href'
+        ).extract()
+        for pdf_link in pdf_links_selectors:
+            yield response.follow(pdf_link, callback=self.parse_pdf)
         yield {
             "url": response.url,
             "content": parsed_content,
@@ -48,6 +52,20 @@ class PageCrawler(CrawlSpider):
             "metadata": extruct.extract(
                 response.text, response.url, syntaxes=["opengraph", "json-ld"]
             ),
+            "filetype": "html",
+        }
+
+    def parse_pdf(self, response):
+        reader = PyPDF2.PdfReader(io.BytesIO(response.body))
+        content = ""
+        for page in reader.pages:
+            content += page.extract_text()
+        title = reader.metadata.title if reader.metadata.title else ""
+        yield {
+            "url": response.url,
+            "title": title,
+            "content": content,
+            "filetype": "pdf",
         }
 
 

@@ -21,6 +21,11 @@ class StartCrawl(MApiView):
 
 class StopCrawl(MApiView):
     def post(self, request):
+        if not crawler_manager.url:  # if crawler has not ran once
+            return Response(
+                "Crawler has not run yet", status=status.HTTP_400_BAD_REQUEST
+            )
+
         if crawler_manager.is_crawling():
             crawler_manager.stop_crawler()
             return Response({"Crawler Stopped"}, status=status.HTTP_200_OK)
@@ -54,8 +59,11 @@ class Search(MApiView):
         collection = database.webpages
         if serializer.is_valid():
             keywords = serializer.data.get("keywords")
+            filter = serializer.data.get("filter")
             results = list(
-                collection.find({"$text": {"$search": keywords}}, {"_id": False})
+                collection.find(
+                    {"filetype": filter, "$text": {"$search": keywords}}, {"_id": False}
+                )
             )
             if results:
                 return Response(results, status=status.HTTP_200_OK)

@@ -3,3 +3,4 @@ djangorestframework
 scrapy
 pymongo
 extruct
+pypdf2

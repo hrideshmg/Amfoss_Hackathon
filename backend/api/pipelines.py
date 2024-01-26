@@ -17,7 +17,8 @@ class StoreItem:
 
         url = adapter.get("url")
         content = adapter.get("content")
-        if adapter.get("metadata")["opengraph"]:
+        filetype = adapter.get("filetype")
+        if filetype == "html" and adapter.get("metadata")["opengraph"]:
             title = [
                 x[1]
                 for x in adapter.get("metadata")["opengraph"][0]["properties"]
@@ -25,7 +26,9 @@ class StoreItem:
             ][0]
         else:
             title = adapter.get("title")
-        self.collection.insert_one({"url": url, "content": content, "title": title})
+        self.collection.insert_one(
+            {"url": url, "content": content, "title": title, "filetype": filetype}
+        )
 
     def close_spider(self, spider):
         self.client.close()
