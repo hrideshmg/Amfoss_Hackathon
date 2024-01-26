@@ -57,6 +57,10 @@ class _HomePageState extends State<HomePage> {
 
     if (stopped) {
       t.cancel();
+      setState(() {
+        pages = "0";
+      });
+      return;
     }
 
     var uri = Uri.parse('${globals.ip}/crawler_status');
@@ -64,14 +68,8 @@ class _HomePageState extends State<HomePage> {
     if (response.statusCode == 200) {
       var status_str = response.body;
       var status = jsonDecode(status_str) as Map<String, dynamic>;
-      //Data status=dataFromJson(json)[0];
       if (status['status'] == "stopped") {
-        t.cancel();
         stopped = true;
-        status['status'] = "completed";
-      }
-      if (stopped) {
-        status['status'] = "stopped";
       }
       setState(() {
         currenturl = status['url'] ?? '';
