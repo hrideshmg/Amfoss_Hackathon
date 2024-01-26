@@ -6,7 +6,7 @@ from utils import get_db
 
 class StoreItem:
     def open_spider(self, spider):
-        self.client, self.database = get_db("crawl_test")
+        self.client, self.database = get_db("mock_data")
         self.collection = self.database.webpages
         self.collection.create_index(
             {"content": TEXT, "title": TEXT}, default_language="english"

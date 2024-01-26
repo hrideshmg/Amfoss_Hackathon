@@ -50,7 +50,7 @@ class CrawlerStatus(MApiView):
 class Search(MApiView):
     def post(self, request):
         serializer = SearchSerializer(data=request.data)
-        database = get_db("crawl_test")[1]
+        database = get_db("mock_data")[1]
         collection = database.webpages
         if serializer.is_valid():
             keywords = serializer.data.get("keywords")
