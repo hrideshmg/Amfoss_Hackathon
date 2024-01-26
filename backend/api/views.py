@@ -1,14 +1,15 @@
-from api.crawler import CrawlerManager
-from api.custom_views import MApiView
-from api.serializers import SearchSerializer, UrlSerializer
 from rest_framework import status
 from rest_framework.response import Response
+
+from api.crawler import CrawlerManager
+from api.custom_views import APIView
+from api.serializers import SearchSerializer, UrlSerializer
 from utils import get_db
 
 crawler_manager = CrawlerManager()
 
 
-class StartCrawl(MApiView):
+class StartCrawl(APIView):
     def post(self, request):
         serializer = UrlSerializer(data=request.data)
         if serializer.is_valid():
@@ -18,7 +19,7 @@ class StartCrawl(MApiView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class StopCrawl(MApiView):
+class StopCrawl(APIView):
     def post(self, request):
         if not crawler_manager.url:  # if crawler has not ran once
             return Response(
@@ -34,7 +35,7 @@ class StopCrawl(MApiView):
             )
 
 
-class CrawlerStatus(MApiView):
+class CrawlerStatus(APIView):
     def get(self, request):
         if crawler_manager.url:  # If crawler has ran once
             return Response(
@@ -51,7 +52,7 @@ class CrawlerStatus(MApiView):
             )
 
 
-class Search(MApiView):
+class Search(APIView):
     def post(self, request):
         serializer = SearchSerializer(data=request.data)
         database = get_db("crawl_test")[1]

@@ -25,6 +25,7 @@ class PageCrawler(CrawlSpider):
         super().__init__(*args, **kwargs)
         self.start_urls = [kwargs.get("start_url")]
         self.allowed_domains = [urlparse(kwargs.get("start_url")).netloc]
+        self.saved_pages = 0
 
     name = "crawler"
     rules = (
@@ -112,8 +113,9 @@ class CrawlerManager:
             return "stopped"
 
     def get_pages(self):
-        if self.is_crawling():
-            return self.queue.get()
+        if self.is_crawling() and not self.queue.empty():
+            self.queue.saved_pages = self.queue.get_nowait()
+            return self.queue.saved_pages
         else:
             return self.saved_pages
 
