@@ -10,13 +10,13 @@ class RemoteService
   {
     var client = http.Client();
 
-    var uri = Uri.parse('http://192.168.188.204:8000/search');
+    var uri = Uri.parse('http://192.168.188.74:8000/search');
     var response = await client.post(
       uri,
       headers: {
         'Content-Type': 'application/json',
       },
-      body: jsonEncode(<String, String> {'keywords':search, 'filter':'none'})
+      body: jsonEncode(<String, String> {'keywords':search, 'filter':format})
       );
     if (response.statusCode == 200)
     {
