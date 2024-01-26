@@ -1,9 +1,8 @@
-from rest_framework import status
-from rest_framework.response import Response
-
 from api.crawler import CrawlerManager
 from api.custom_views import MApiView
 from api.serializers import SearchSerializer, UrlSerializer
+from rest_framework import status
+from rest_framework.response import Response
 from utils import get_db
 
 crawler_manager = CrawlerManager()
@@ -21,7 +20,12 @@ class StartCrawl(MApiView):
 
 class StopCrawl(MApiView):
     def post(self, request):
-        if crawler_manager.is_crawling():
+        if not crawler_manager.url:  # if crawler has not ran once
+            return Response(
+                "Crawler has not run yet", status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if crawler_manager.crawler_process.is_alive():
             crawler_manager.stop_crawler()
             return Response({"Crawler Stopped"}, status=status.HTTP_200_OK)
         else:
@@ -36,8 +40,8 @@ class CrawlerStatus(MApiView):
             return Response(
                 {
                     "url": crawler_manager.url,
-                    "running": crawler_manager.is_crawling(),
-                    "pages": crawler_manager.get_pages(),
+                    "status": crawler_manager.is_crawling(),
+                    "pages": str(crawler_manager.get_pages()),
                 },
                 status=status.HTTP_200_OK,
             )
@@ -54,8 +58,11 @@ class Search(MApiView):
         collection = database.webpages
         if serializer.is_valid():
             keywords = serializer.data.get("keywords")
+            filter = serializer.data.get("filter")
             results = list(
-                collection.find({"$text": {"$search": keywords}}, {"_id": False})
+                collection.find(
+                    {"filetype": filter, "$text": {"$search": keywords}}, {"_id": False}
+                )
             )
             if results:
                 return Response(results, status=status.HTTP_200_OK)
