@@ -21,6 +21,7 @@ class resultlist extends StatelessWidget {
     return Scaffold(
       body:Material(
         elevation: 5,
+        
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -46,8 +47,8 @@ class resultlist extends StatelessWidget {
                 ),
             ],
           ),
-        ),
+        ),)
       )
-    );
+    ;
   }
 }

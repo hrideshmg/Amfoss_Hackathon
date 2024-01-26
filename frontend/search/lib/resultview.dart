@@ -28,46 +28,47 @@ class _ResultState extends State<resultview> {
     ['d','e','f'],
     ['g','e','h'],
   ];
-  // List<Data>? data;
-  // var isLoaded = false;
+  List<Data>? data;
+  var isLoaded = false;
+  String format = 'PDF';
 
   @override
   void initState() {
     super.initState();
     search = TextEditingController(text: widget.searched);
 
-    // getData();
+    getData();
   }
 
   
 
-  // final apiUrl = 'http://192.168.188.204:8000/search';
-  
-  // Future<void> sendPostRequest() async {
-  //   var response = await http.post(apiUrl as Uri,
-  //       headers: {"Content-Type": "application/json"},
-  //       body: jsonEncode({
-  //         "keyword": search.text,
-  //         "filter": 'PDF',
+  final apiUrl = 'http://192.168.188.204:8000/search';
+  /*
+  Future<void> sendPostRequest() async {
+     var response = await http.post(apiUrl as Uri,
+         headers: {"Content-Type": "application/json"},
+         body: jsonEncode({
+           "keyword": search.text,
+           "filter": 'PDF',
           
-  //       }));
+         }));
 
-  //   if (response.statusCode == 200) {
-  //     print('success');
-  //   } else {
-  //     print('error');
-  //   }
-  // }
-
-  // getData() async{
-  //   data = await RemoteService().getData(response);
-  //   if (data != null)
-  //   {
-  //     setState(() {
-  //       isLoaded = true;
-  //     });
-  //   }
-  // }
+     if (response.statusCode == 200) {
+       print('success');
+     } else {
+       print('error');
+     }
+   }
+*/
+   getData() async{
+     data = await RemoteService().getData(search.text,format);
+     if (data != null)
+     {
+       setState(() {
+         isLoaded = true;
+       });
+     }
+   }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +115,7 @@ class _ResultState extends State<resultview> {
         
         
           ListView.builder(
-            itemCount: result.length,
+            itemCount: data!.length,
             itemBuilder: (BuildContext context, int index){
               return(Column(
                 children: [
@@ -124,7 +125,7 @@ class _ResultState extends State<resultview> {
                     ),
                     height: 110,
                     width: screenWidth*0.9,
-                    child: resultlist(url: result[0][index], title: result[1][index], body: result[2][index])
+                    child: resultlist(url: data![index].url, title: data![index].title, body: data![index].content)
                   ),
                   SizedBox(height: 20,)
                 ],)
