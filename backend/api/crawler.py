@@ -25,7 +25,6 @@ class PageCrawler(CrawlSpider):
         super().__init__(*args, **kwargs)
         self.start_urls = [kwargs.get("start_url")]
         self.allowed_domains = [urlparse(kwargs.get("start_url")).netloc]
-        self.saved_pages = 0
 
     name = "crawler"
     rules = (
@@ -74,6 +73,7 @@ class CrawlerManager:
     def __init__(self):
         self.url = ""
         self.queue = multiprocessing.Queue(1)
+        self.saved_pages = 0
 
     def _start_crawler_process(self, url, queue):
         runner = CrawlerRunner(
