@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'package:search/globals.dart' as globals;
 import 'dart:async';
 import 'package:search/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,65 +22,67 @@ class _HomePageState extends State<HomePage> {
   String pages = "0";
   bool stopped = false;
 
-  starttimer(){
-    const onesec=Duration(seconds: 1);
+  starttimer() {
+    const onesec = Duration(milliseconds: 1500);
     Timer.periodic(onesec, getstatus);
   }
 
-  startcrawler(url)async{
+  startcrawler(url) async {
+    setState(() {
+      pages = "0";
+    });
     var client = http.Client();
 
-    var uri = Uri.parse('http://192.168.188.74:8000/start_crawl');
-    client.post(
-      uri,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(<String, String> {'url':url})
-      );
-      starttimer();
-      stopped = false;
+    var uri = Uri.parse('${globals.ip}/start_crawl');
+    client.post(uri,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{'url': url}));
+    starttimer();
+    stopped = false;
   }
 
-  stopcrawler()async{
+  stopcrawler() async {
     var client = http.Client();
-
-    var uri = Uri.parse('http://192.168.188.74:8000/stop_crawl');
+    stopped = true;
+    var uri = Uri.parse('${globals.ip}/stop_crawl');
     client.post(
       uri,
-      );
-      stopped = true;
+    );
   }
 
-  getstatus(Timer t)async{
+  getstatus(Timer t) async {
     var client = http.Client();
 
-    var uri = Uri.parse('http://192.168.188.74:8000/crawler_status');
+    if (stopped) {
+      t.cancel();
+    }
+
+    var uri = Uri.parse('${globals.ip}/crawler_status');
     var response = await client.get(uri);
-    if (response.statusCode == 200)
-    {
+    if (response.statusCode == 200) {
       var status_str = response.body;
       var status = jsonDecode(status_str) as Map<String, dynamic>;
       //Data status=dataFromJson(json)[0];
-      if(status['status'] == "completed"){
-          t.cancel();
-          status['status'] = "completed";
+      if (status['status'] == "completed") {
+        t.cancel();
+        stopped = true;
+        status['status'] = "completed";
       }
       if (stopped) {
-        t.cancel();
         status['status'] = "stopped";
       }
       setState(() {
-         currenturl = status['url']?? '';
-         currentstatus = status['status']?? '';
-        pages = status['pages']?? '';
+        currenturl = status['url'] ?? '';
+        currentstatus = status['status'] ?? '';
+        pages = status['pages'] ?? '';
       });
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -104,7 +106,8 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(16.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 236, 234, 234).withOpacity(0.5),
+                  color:
+                      const Color.fromARGB(255, 236, 234, 234).withOpacity(0.5),
                   borderRadius: BorderRadius.circular(8.0),
                   boxShadow: [
                     BoxShadow(
@@ -125,7 +128,8 @@ class _HomePageState extends State<HomePage> {
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             hintText: 'Type in a URL....',
-                            hintStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
+                            hintStyle:
+                                TextStyle(color: Colors.white.withOpacity(0.8)),
                             border: InputBorder.none,
                           ),
                           onSubmitted: (value) {
@@ -139,7 +143,6 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           startcrawler(urlController.text);
                           urlController.clear();
-                
                         },
                       ),
                     ],
@@ -157,7 +160,7 @@ class _HomePageState extends State<HomePage> {
             //     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             //   ),
             // ),
-            
+
             // ElevatedButton(
             //   onPressed: () {
             //     setState(() {
@@ -171,68 +174,65 @@ class _HomePageState extends State<HomePage> {
             //     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             //   ),
             // ),
-            Stack(
-            children:[
-            Container(
-              // color: Color.fromARGB(255, 255, 255, 255),
-              width: screenWidth*0.38,
-              height: screenHeight*0.05,
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 255, 255, 255),
-                borderRadius: BorderRadius.all(Radius.circular(20))
+            Stack(children: [
+              Container(
+                // color: Color.fromARGB(255, 255, 255, 255),
+                width: screenWidth * 0.38,
+                height: screenHeight * 0.05,
+                decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                child: Row(
+                  children: [
+                    Positioned(
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {});
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Color.fromARGB(255, 253, 253, 253).withOpacity(1),
+                        ),
+                        child: Text(
+                          "Pages: $pages",
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 0, 0, 0),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        stopcrawler();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black.withOpacity(0.5),
+                      ),
+                      child: Text(
+                        'stop',
+                        style: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              child: Row(
-                children: [
-
-            Positioned(
-
-              child:   
-            TextButton(
-              onPressed: () {
-                setState(() {
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 253, 253, 253).withOpacity(1),
-              ),
-              child: Text(
-                "Pages: $pages",
-                style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontWeight: FontWeight.bold),
-              ),
-            ),),
-            ElevatedButton(
-              onPressed: () {
-                stopcrawler();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black.withOpacity(0.5),
-              ),
-              child: Text(
-                'stop',
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                
-              ),
-            ),
-            ],
-              ),
-            ),]),
-
+            ]),
 
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
-                
-                            context,
-                            MaterialPageRoute(builder: (context) => Home()),
-                          );
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black.withOpacity(0.5),
               ),
               child: Text(
                 'search',
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
             // ElevatedButton(
