@@ -120,5 +120,5 @@ class CrawlerManager:
             return self.saved_pages
 
     def stop_crawler(self):
-        self.saved_pages = self.queue.get_nowait()
+        self.saved_pages = 0
         self.crawler_process.terminate()
