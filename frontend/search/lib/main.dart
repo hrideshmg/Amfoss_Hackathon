@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'homepage.dart';
+import 'home.dart';
 
 
 void main() {
@@ -27,7 +27,7 @@ class _AppState extends State<MyApp>{
     return(
       MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Home()));
+        home: HomePage()));
 
   }
 }

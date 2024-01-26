@@ -30,7 +30,7 @@ class _ResultState extends State<resultview> {
   ];
   List<Data>? data;
   var isLoaded = false;
-  String format = 'PDF';
+  String format = 'html';
 
   @override
   void initState() {
@@ -42,7 +42,7 @@ class _ResultState extends State<resultview> {
 
   
 
-  final apiUrl = 'http://192.168.188.204:8000/search';
+  final apiUrl = 'http://192.168.188.74:8000/search';
   /*
   Future<void> sendPostRequest() async {
      var response = await http.post(apiUrl as Uri,
@@ -99,6 +99,9 @@ class _ResultState extends State<resultview> {
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                 ),
+                onSubmitted: (value) {
+                  getData();
+                },
               ),
             )
       )),
