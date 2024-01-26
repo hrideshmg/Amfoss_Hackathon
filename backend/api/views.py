@@ -1,29 +1,12 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.reverse import reverse
 
 from api.crawler import CrawlerManager
 from api.custom_views import MApiView
-from api.serializers import UrlSerializer
+from api.serializers import SearchSerializer, UrlSerializer
+from utils import get_db
 
 crawler_manager = CrawlerManager()
-
-
-class ApiRoot(MApiView):
-    def get(self, request):
-        return Response(
-            {
-                "start crawl": reverse("start-crawl", request=request),
-                "stop crawl": reverse("stop-crawl", request=request),
-                "search": reverse(
-                    "search",
-                    request=request,
-                    kwargs={"filter": "filter", "keywords": "keywords"},
-                ),
-                "get pages": reverse("get-pages", request=request),
-            },
-            status=status.HTTP_200_OK,
-        )
 
 
 class StartCrawl(MApiView):
@@ -37,17 +20,46 @@ class StartCrawl(MApiView):
 
 
 class StopCrawl(MApiView):
-    def get(self, request):
-        crawler_manager.stop_crawler()
-        return Response({crawler_manager.is_crawling()}, status=status.HTTP_200_OK)
+    def post(self, request):
+        if crawler_manager.is_crawling():
+            crawler_manager.stop_crawler()
+            return Response({"Crawler Stopped"}, status=status.HTTP_200_OK)
+        else:
+            return Response(
+                {"Crawler is not running"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
 
-class GetPages(MApiView):
+class CrawlerStatus(MApiView):
     def get(self, request):
-        return Response({crawler_manager.get_pages()})
+        if crawler_manager.url:  # If crawler has ran once
+            return Response(
+                {
+                    "url": crawler_manager.url,
+                    "running": crawler_manager.is_crawling(),
+                    "pages": crawler_manager.get_pages(),
+                },
+                status=status.HTTP_200_OK,
+            )
+        else:
+            return Response(
+                "Crawler has not run yet", status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class Search(MApiView):
-    def get(self, request, filter, keywords):
-        pass
-        return Response({filter, keywords}, status=status.HTTP_200_OK)
+    def post(self, request):
+        serializer = SearchSerializer(data=request.data)
+        database = get_db("crawl_test")[1]
+        collection = database.webpages
+        if serializer.is_valid():
+            keywords = serializer.data.get("keywords")
+            results = list(
+                collection.find({"$text": {"$search": keywords}}, {"_id": False})
+            )
+            if results:
+                return Response(results, status=status.HTTP_200_OK)
+            else:
+                return Response("No results found", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

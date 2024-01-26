@@ -52,6 +52,10 @@ class PageCrawler(CrawlSpider):
 
 
 class CrawlerManager:
+    def __init__(self):
+        self.url = ""
+        self.queue = multiprocessing.Queue(1)
+
     def _start_crawler_process(self, url, queue):
         runner = CrawlerRunner(
             settings={"ITEM_PIPELINES": {"api.pipelines.StoreItem": 100}}
@@ -77,7 +81,7 @@ class CrawlerManager:
         reactor.run()
 
     def start_crawler(self, url="none"):
-        self.queue = multiprocessing.Queue(1)
+        self.url = url
         self.crawler_process = multiprocessing.Process(
             target=self._start_crawler_process, args=(url, self.queue)
         )
