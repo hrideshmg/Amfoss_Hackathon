@@ -106,7 +106,10 @@ class CrawlerManager:
         self.crawler_process.start()
 
     def is_crawling(self):
-        return self.crawler_process.is_alive()
+        if self.crawler_process.is_alive():
+            return "running"
+        else:
+            return "stopped"
 
     def get_pages(self):
         if self.is_crawling():
