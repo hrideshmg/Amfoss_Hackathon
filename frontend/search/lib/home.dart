@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
       var status_str = response.body;
       var status = jsonDecode(status_str) as Map<String, dynamic>;
       //Data status=dataFromJson(json)[0];
-      if (status['status'] == "completed") {
+      if (status['status'] == "stopped") {
         t.cancel();
         stopped = true;
         status['status'] = "completed";
