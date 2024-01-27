@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:search/globals.dart' as globals;
 import 'dart:async';
 import 'package:search/homepage.dart';
@@ -96,10 +97,10 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'App Name',
-              style: TextStyle(fontSize: 60),
-            ),
+            Text('sp1d3r h1v3',
+                style: TextStyle(
+                    fontSize: 60,
+                    fontFamily: GoogleFonts.lilitaOne().fontFamily)),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Container(
@@ -123,11 +124,13 @@ class _HomePageState extends State<HomePage> {
                       Expanded(
                         child: TextField(
                           controller: urlController,
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 0, 0, 0)),
                           decoration: InputDecoration(
                             hintText: 'Type in a URL....',
-                            hintStyle:
-                                TextStyle(color: Colors.white.withOpacity(0.8)),
+                            hintStyle: TextStyle(
+                                color: const Color.fromARGB(255, 0, 0, 0)
+                                    .withOpacity(0.8)),
                             border: InputBorder.none,
                           ),
                           onSubmitted: (value) {
@@ -137,7 +140,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.search, color: Colors.white),
+                        icon: const Icon(Icons.search,
+                            color: Color.fromARGB(255, 0, 0, 0)),
                         onPressed: () {
                           startcrawler(urlController.text);
                           urlController.clear();
@@ -172,51 +176,70 @@ class _HomePageState extends State<HomePage> {
             //     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             //   ),
             // ),
+            // Text(
+            //   loading ? 'Wait...Let me crawl' : '',
+            //   style: TextStyle(
+            //     fontFamily: GoogleFonts.cuteFont().fontFamily,
+            //   ),
+            // ),
+
+            SizedBox(
+              height: 20,
+            ),
+
             Stack(children: [
               Container(
-                // color: Color.fromARGB(255, 255, 255, 255),
-                width: screenWidth * 0.38,
-                height: screenHeight * 0.05,
-                decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                child: Row(
-                  children: [
-                    Positioned(
-                      child: TextButton(
-                        onPressed: () {
-                          setState(() {});
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Color.fromARGB(255, 253, 253, 253).withOpacity(1),
-                        ),
-                        child: Text(
-                          "Pages: $pages",
-                          style: const TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                    ElevatedButton(
+                  // color: Color.fromARGB(255, 255, 255, 255),
+                  width: screenWidth * 0.6,
+                  /*38*/
+                  height: screenHeight * 0.05,
+                  decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  child: Row(children: [
+                    TextButton(
                       onPressed: () {
-                        stopcrawler();
+                        setState(() {});
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black.withOpacity(0.5),
+                        backgroundColor:
+                            Color.fromARGB(255, 253, 253, 253).withOpacity(1),
                       ),
                       child: Text(
-                        'stop',
+                        "Pages indexed: $pages",
                         style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
-                  ],
-                ),
-              ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            right: 1.0, top: 2.0, bottom: 3.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            stopcrawler();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromARGB(255, 236, 234, 234)
+                                    .withOpacity(0.5),
+                          ),
+                          child: Text(
+                            'stop',
+                            style: const TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ])),
             ]),
 
+            SizedBox(
+              height: 20,
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -225,12 +248,14 @@ class _HomePageState extends State<HomePage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black.withOpacity(0.5),
+                backgroundColor:
+                    const Color.fromARGB(255, 236, 234, 234).withOpacity(0.5),
               ),
               child: Text(
                 'search',
                 style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold),
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    fontWeight: FontWeight.bold),
               ),
             ),
             // ElevatedButton(
