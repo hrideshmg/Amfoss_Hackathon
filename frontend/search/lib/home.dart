@@ -97,10 +97,12 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('sp1d3r h1v3',
+            Text('SP1D3R H1V3',
                 style: TextStyle(
                     fontSize: 60,
-                    fontFamily: GoogleFonts.lilitaOne().fontFamily)),
+                    fontFamily: GoogleFonts.playfairDisplay().fontFamily)),
+                    
+            SizedBox(height: 30,),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Container(

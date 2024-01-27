@@ -33,13 +33,27 @@ class _HomeState extends State<Home> {
             ),
           ),
           Positioned(
+            top: screenHeight * 0.037,
+            left: screenWidth * 0.155,
+            child: Container(
+              height: screenHeight*0.5,
+              width: screenWidth*0.7,
+              decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/icon.png'),
+                fit: BoxFit.fitWidth,
+              ),
+            ),
+            )
+          ),
+          Positioned(
               top: screenHeight * 0.44,
               left: screenWidth * 0.07,
               child: Row(
                 children: [
                   Container(
                       width: screenWidth * 0.6,
-                      height: screenHeight * 0.06,
+                      height: screenHeight * 0.07,
                       decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(40))),
                       child: Material(
@@ -51,7 +65,7 @@ class _HomeState extends State<Home> {
                             hintStyle: TextStyle(fontSize: 11),
                             border: OutlineInputBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                                  BorderRadius.all(Radius.circular(0)),
                             ),
                           ),
                           onSubmitted: (value) {
@@ -65,11 +79,12 @@ class _HomeState extends State<Home> {
                         ),
                       )),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(7.0),
                     child: Material(
                       elevation: 20,
                       child: DropdownMenu(
                           width: 100,
+                          
                           label: const Text("filter"),
                           initialSelection: "html",
                           onSelected: (filter) {
@@ -93,56 +108,42 @@ class _HomeState extends State<Home> {
                   foregroundColor: Color.fromARGB(255, 0, 0, 0),
                 ),
                 child: const Text(
-                  '+',
+                  '',
                   style: TextStyle(
                     fontSize: 40,
                   ),
                 ),
               ))),
-          Positioned(
-              left: 15,
-              bottom: 23,
-              child: Container(
-                  child: IconButton(
-                icon: Icon(
-                  Icons.dynamic_feed_outlined,
-                  size: 30,
-                ),
-                onPressed: () {
-                  /*Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => viewTab()),
-                        );*/
-                },
-              ))),
+          
+
           Positioned(
               left: screenWidth * 0.20,
-              top: screenHeight * 0.57,
+              top: screenHeight * 0.60,
               child: Text(
                 'what are you',
                 style: TextStyle(
                   fontFamily: GoogleFonts.lilitaOne().fontFamily,
-                  fontSize: 48,
+                  fontSize: 44,
                 ),
               )),
           Positioned(
-              left: screenWidth * 0.15,
-              top: screenHeight * 0.66,
+              left: screenWidth * 0.145,
+              top: screenHeight * 0.68,
               child: Text(
                 'CURIOUS',
                 style: TextStyle(
                   fontFamily: GoogleFonts.permanentMarker().fontFamily,
-                  fontSize: 70,
+                  fontSize: 66,
                 ),
               )),
           Positioned(
-              left: screenWidth * 0.35,
-              top: screenHeight * 0.775,
+              left: screenWidth * 0.33,
+              top: screenHeight * 0.81,
               child: Text(
                 'about?',
                 style: TextStyle(
                   fontFamily: GoogleFonts.lilitaOne().fontFamily,
-                  fontSize: 48,
+                  fontSize: 44,
                 ),
               )),
         ]));

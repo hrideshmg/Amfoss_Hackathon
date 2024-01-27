@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class resultlist extends StatelessWidget {
   resultlist({required this.url, required this.title, required this.body});
@@ -36,12 +37,12 @@ class resultlist extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 24,
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,
-                      fontFamily: 'Roboto',
+                      fontFamily: GoogleFonts.ibmPlexMono().fontFamily,
                     ),
                   ),
                 ),
@@ -50,10 +51,10 @@ class resultlist extends StatelessWidget {
                       const EdgeInsets.symmetric(vertical: 1, horizontal: 5),
                   child: Text(
                     url,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 10,
                       color: Colors.grey,
-                      fontFamily: 'Roboto',
+                      fontFamily: GoogleFonts.ibmPlexMono().fontFamily,
                     ),
                   ),
                 ),
@@ -62,10 +63,10 @@ class resultlist extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: Text(
                       body.trim(),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
                         color: Colors.black,
-                        fontFamily: 'Roboto',
+                        fontFamily: GoogleFonts.josefinSans().fontFamily,
                       ),
                     ),
                   ),
