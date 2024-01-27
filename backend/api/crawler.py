@@ -38,6 +38,8 @@ class PageCrawler(CrawlSpider):
 
     def parse_item(self, response):
         parsed_content = "".join(response.xpath("*//p/text()").getall())
+        if not parsed_content:
+            parsed_content = "".join(response.xpath("*//font/text()").getall())
         parsed_content = replace_escape_chars(parsed_content)
         title = response.xpath("//title/text()").get("")
         pdf_links_selectors = response.xpath(
@@ -120,5 +122,5 @@ class CrawlerManager:
             return self.saved_pages
 
     def stop_crawler(self):
-        self.saved_pages = self.queue.get_nowait()
         self.crawler_process.terminate()
+        self.saved_pages = 0
