@@ -21,10 +21,8 @@ class RemoteService {
 
       return dataFromJson(json);
     } else {
-      print("===================================================");
-      print(response.body);
-      print("===================================================");
+      // return dataFromJson('{"failed}');
+      print("no results");
     }
   }
 }
-

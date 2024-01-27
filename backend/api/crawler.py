@@ -115,6 +115,10 @@ class CrawlerManager:
             return "stopped"
 
     def get_pages(self):
+        # Crawler Limit
+        if self.is_crawling() and self.saved_pages >= 1000:
+            self.stop_crawler()
+
         if self.is_crawling() and not self.queue.empty():
             self.queue.saved_pages = self.queue.get_nowait()
             return self.queue.saved_pages
