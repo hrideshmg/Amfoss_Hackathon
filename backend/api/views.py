@@ -1,9 +1,8 @@
+from api.crawler import CrawlerManager
+from api.serializers import SearchSerializer, UrlSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from api.crawler import CrawlerManager
-from api.serializers import SearchSerializer, UrlSerializer
 from utils import get_db
 
 crawler_manager = CrawlerManager()
@@ -63,7 +62,7 @@ class Search(APIView):
             results = list(
                 collection.find(
                     {"filetype": filter, "$text": {"$search": keywords}}, {"_id": False}
-                )
+                ).sort({"score": {"$meta": "textScore"}})
             )
             if results:
                 return Response(results, status=status.HTTP_200_OK)

@@ -107,6 +107,7 @@ class CrawlerManager:
             target=self._start_crawler_process, args=(url, self.queue)
         )
         self.crawler_process.start()
+        self.saved_pages = 0
 
     def is_crawling(self):
         if self.crawler_process.is_alive():
@@ -120,11 +121,10 @@ class CrawlerManager:
             self.stop_crawler()
 
         if self.is_crawling() and not self.queue.empty():
-            self.queue.saved_pages = self.queue.get_nowait()
-            return self.queue.saved_pages
+            self.saved_pages = self.queue.get_nowait()
+            return self.saved_pages
         else:
             return self.saved_pages
 
     def stop_crawler(self):
         self.crawler_process.terminate()
-        self.saved_pages = 0
