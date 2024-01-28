@@ -33,21 +33,20 @@ class _HomeState extends State<Home> {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.037,
-            left: screenWidth * 0.155,
-            child: Container(
-              height: screenHeight*0.5,
-              width: screenWidth*0.7,
-              decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/icon.png'),
-                fit: BoxFit.fitWidth,
-              ),
-            ),
-            )
-          ),
+              top: screenHeight * 0.060,
+              left: screenWidth * 0.155,
+              child: Container(
+                height: screenHeight * 0.5,
+                width: screenWidth * 0.7,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/icon.png'),
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+              )),
           Positioned(
-              top: screenHeight * 0.44,
+              top: screenHeight * 0.47,
               left: screenWidth * 0.07,
               child: Row(
                 children: [
@@ -84,7 +83,6 @@ class _HomeState extends State<Home> {
                       elevation: 20,
                       child: DropdownMenu(
                           width: 100,
-                          
                           label: const Text("filter"),
                           initialSelection: "html",
                           onSelected: (filter) {
@@ -114,39 +112,38 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ))),
-          
-
           Positioned(
               left: screenWidth * 0.20,
               top: screenHeight * 0.60,
               child: Text(
                 'what are you',
                 style: TextStyle(
-                  fontFamily: GoogleFonts.lilitaOne().fontFamily,
+                  fontFamily: GoogleFonts.openSans().fontFamily,
+                  fontWeight: FontWeight.w800,
                   fontSize: 44,
                 ),
               )),
           Positioned(
               left: screenWidth * 0.145,
-              top: screenHeight * 0.68,
+              top: screenHeight * 0.66,
               child: Text(
                 'CURIOUS',
                 style: TextStyle(
                   fontFamily: GoogleFonts.permanentMarker().fontFamily,
-                  fontSize: 66,
+                  fontSize: 70,
                 ),
               )),
           Positioned(
               left: screenWidth * 0.33,
-              top: screenHeight * 0.81,
+              top: screenHeight * 0.76,
               child: Text(
                 'about?',
                 style: TextStyle(
-                  fontFamily: GoogleFonts.lilitaOne().fontFamily,
+                  fontFamily: GoogleFonts.openSans().fontFamily,
+                  fontWeight: FontWeight.w800,
                   fontSize: 44,
                 ),
               )),
         ]));
   }
 }
-

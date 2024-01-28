@@ -58,9 +58,6 @@ class _HomePageState extends State<HomePage> {
 
     if (stopped) {
       t.cancel();
-      setState(() {
-        pages = "0";
-      });
       return;
     }
 
@@ -97,12 +94,24 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('SP1D3R H1V3',
-                style: TextStyle(
-                    fontSize: 60,
-                    fontFamily: GoogleFonts.playfairDisplay().fontFamily)),
-                    
-            SizedBox(height: 30,),
+            Text(
+              'SP1D3R',
+              style: TextStyle(
+                  fontSize: 60,
+                  fontFamily: GoogleFonts.trispace().fontFamily,
+                  letterSpacing: 10.0,
+                  fontWeight: FontWeight.w500,
+                  shadows: const <Shadow>[
+                    Shadow(
+                        color: Color(0xff4f4e4d),
+                        blurRadius: 15.0,
+                        offset: Offset(2.0, 2.0))
+                  ]),
+            ),
+
+            SizedBox(
+              height: 30,
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Container(
@@ -131,6 +140,7 @@ class _HomePageState extends State<HomePage> {
                           decoration: InputDecoration(
                             hintText: 'Type in a URL....',
                             hintStyle: TextStyle(
+                                fontFamily: GoogleFonts.openSans().fontFamily,
                                 color: const Color.fromARGB(255, 0, 0, 0)
                                     .withOpacity(0.8)),
                             border: InputBorder.none,
@@ -142,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.search,
+                        icon: const Icon(Icons.input,
                             color: Color.fromARGB(255, 0, 0, 0)),
                         onPressed: () {
                           startcrawler(urlController.text);
@@ -209,7 +219,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                       child: Text(
                         "Pages indexed: $pages",
-                        style: const TextStyle(
+                        style: TextStyle(
+                            fontFamily: GoogleFonts.openSans().fontFamily,
                             color: Color.fromARGB(255, 0, 0, 0),
                             fontWeight: FontWeight.bold),
                       ),
@@ -223,13 +234,16 @@ class _HomePageState extends State<HomePage> {
                             stopcrawler();
                           },
                           style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
                             backgroundColor:
                                 const Color.fromARGB(255, 236, 234, 234)
                                     .withOpacity(0.5),
                           ),
                           child: Text(
-                            'stop',
-                            style: const TextStyle(
+                            'Stop',
+                            style: TextStyle(
+                                fontFamily: GoogleFonts.openSans().fontFamily,
                                 color: Color.fromARGB(255, 0, 0, 0),
                                 fontWeight: FontWeight.bold),
                           ),
@@ -239,8 +253,8 @@ class _HomePageState extends State<HomePage> {
                   ])),
             ]),
 
-            SizedBox(
-              height: 20,
+            const SizedBox(
+              height: 37,
             ),
             ElevatedButton(
               onPressed: () {
@@ -250,14 +264,27 @@ class _HomePageState extends State<HomePage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    const Color.fromARGB(255, 236, 234, 234).withOpacity(0.5),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                backgroundColor: const Color(0xff63A6CE),
               ),
-              child: Text(
-                'search',
-                style: const TextStyle(
-                    color: Color.fromARGB(255, 0, 0, 0),
-                    fontWeight: FontWeight.bold),
+              child: Wrap(
+                children: [
+                  Text(
+                    'Search',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: GoogleFonts.openSans().fontFamily,
+                      fontSize: 25,
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 2.0),
+                    child: Icon(Icons.search, color: Colors.white, size: 34),
+                  ),
+                ],
               ),
             ),
             // ElevatedButton(
